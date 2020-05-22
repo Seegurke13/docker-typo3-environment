@@ -1,0 +1,41 @@
+version: "3.3"
+
+services:
+  apache:
+    image: webdevops/apache-dev:latest
+    depends_on:
+      - php
+    volumes:
+      - ./app:/app/
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - php
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/public
+      - WEB_PHP_SOCKET=php:9000
+
+  php:
+    image: webdevops/php
+    ports:
+      - 9000:9000
+    depends_on:
+      - db
+    links:
+      - db
+    working_dir: /app/
+    volumes:
+      - ./app:/app/
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: typo3
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
