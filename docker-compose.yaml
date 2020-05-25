@@ -17,7 +17,7 @@ services:
       - WEB_PHP_SOCKET=php:9000
 
   php:
-    image: webdevops/php
+    image: webdevops/php:7.2
     ports:
       - 9000:9000
     depends_on:
